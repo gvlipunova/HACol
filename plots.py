@@ -72,9 +72,10 @@ def pdsplot(freq, pds, outfile='pds'):
     close()
 
 def binplot(freq, dfreq, pds, dpds, outfile='binnedpds'):
-    
+
+    w=where(isfinite(dpds) & (dpds>0.))
     clf()
-    errorbar(freq, pds, xerr=dfreq, yerr=dpds, marker='.', mec='k', mfc='k', c='k')
+    errorbar(freq[w], pds[w], xerr=dfreq[w], yerr=dpds[w], fmt='.k')
     xscale('log') ; yscale('log')
     ylabel('PDS') ; xlabel('$f$, Hz')
     savefig(outfile+'.png')

@@ -14,6 +14,7 @@ def pds(infile='flux', binning=None, binlogscale=False):
     '''
     lines = loadtxt(infile+".dat", comments="#", delimiter=" ", unpack=False)
     t=lines[:,0] ; l=lines[:,1]
+    print(shape(t))
     f=fft.rfft((l-l.mean())/l.std())
     freq=fft.rfftfreq(size(t),t[1]-t[0])
     
@@ -37,7 +38,7 @@ def pds(infile='flux', binning=None, binlogscale=False):
         binfreqc=(binfreq[1:]+binfreq[:-1])/2. # bin center
         binfreqs=(binfreq[1:]-binfreq[:-1])/2. # bin size
         for k in arange(binning):
-            win=((freq<binfreq[k+1]) & (freq>binfreq[k]))
+            win=((freq<=binfreq[k+1]) & (freq>binfreq[k]))
             binflux[k]=pds[win].mean() ; dbinflux[k]=pds[win].std()
 
         fpds=open(infile+'_pdsbinned.dat', 'w')
@@ -53,7 +54,7 @@ def dynspec(infile='flux', ntimes=10, nbins=10):
     '''
     lines = loadtxt(infile+".dat", comments="#", delimiter=" ", unpack=False)
     t=lines[:,0] ; l=lines[:,1]
-    nsize=size(t)
+    nsize=size(l)
     tbin=linspace(t.min(), t.max(), ntimes+1)
     tcenter=(tbin[1:]+tbin[:-1])/2.
     freq1=1./(t.max())*double(ntimes)/2. ; freq2=freq1*double(nsize)/double(ntimes)/2.
