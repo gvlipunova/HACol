@@ -164,7 +164,7 @@ def diffuse(rho, urad, v, dl, across):
     # -- photon bulk viscosity
     dule_half = ((urad)[1:] - (urad)[:-1])\
                 *across / 3.  / (rtau_left + rtau_right)
-    dule_half +=  duls_half * (v[1:]+v[:-1])/2. # adding the viscous energy flux 
+    #    dule_half +=  duls_half * (v[1:]+v[:-1])/2. # adding the viscous energy flux 
     # -- radial diffusion
     # introducing exponential factors helps reduce the numerical noise from rho variations
     return -duls_half, -dule_half 
@@ -406,6 +406,8 @@ def alltire():
     beta = betafun_p(Fbeta_press(rho, press))
     u = press * 3. * (1.-beta/2.)
     u, rho, press = regularize(u, rho, press)
+    print("estimated heat contribution to luminosity: "+str((-v*u*g.across)[-1]))
+    ii = input("HL")
     # 3.*umagout+(rho/rho[-1])*0.01/g.r
     print("U = "+str((u/umagtar).min())+" to "+str((u/umagtar).max()))
     m, s, e = cons(rho, vinit, u, g)
